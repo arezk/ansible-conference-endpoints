@@ -1,0 +1,5 @@
+---
+- name: generate report
+  template:
+    src: report.j2
+    dest: /tmp/final_report.txt

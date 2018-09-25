@@ -1,7 +1,7 @@
 vars:
   services:
-    h323: "{{ item.h323_mode != 'On'}}"
-    sip: "{{ item.sip_mode  != 'On' }}"
+    h323: "{{ item.h323_mode == 'On'}}"
+    sip: "{{ item.sip_mode  == 'On' }}"
   h323:
     e164: "{{ item.e164 }}"
   system:
