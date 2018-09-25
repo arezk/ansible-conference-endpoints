@@ -10,7 +10,9 @@ vars:
     defaultprotocol: "{{ item.defaultprotocol }}"
   sip:
     displayname: "{{ item.displayname }}"
-    proxy: "{{ item.proxy }}"
+    # Take all the proxy list entries, remove the empty entries then
+    # reconstitute the array.
+    proxy: "{{ (item.proxy|join(',')|replace(',None', '')).split(',') }}"
 
 keys:
   conference:

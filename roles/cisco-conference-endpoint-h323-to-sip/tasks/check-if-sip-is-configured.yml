@@ -1,8 +1,0 @@
----
-- assert:
-    that:
-      parsed_conf_endpoint_config.services[0].sip == True
-      parsed_conf_endpoint_config.services[0].h323 == False
-      parsed_conf_endpoint_config.conference[0].defaultprotocol == 'Sip'
-    set_fact:
-      sip_not_configured: false

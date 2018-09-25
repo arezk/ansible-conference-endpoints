@@ -1,3 +1,0 @@
----
-spec_path: "cisco-conference-endpoint-h323-to-sip/specs"
-spec_file: "{{spec_path}}/conf-endpoint-config.yml"

@@ -15,9 +15,11 @@
   <SIP>
     <DisplayName>{{ h323_sip_config.system[0].name }}</DisplayName>
     <ListenPort>Off</ListenPort>
-    <Proxy item="1">
-      <Address>{{ call_control_ip }}</Address>
+    {% for proxy_ip in call_control_ips %}
+    <Proxy item="{{ loop.index}}">
+      <Address>{{ proxy_ip }}</Address>
     </Proxy>
-    <URI>{{ h323_sip_config.h323[0].e164}}@{{ sipdomain_name }}</URI>
+    {%endfor%}
+    <URI>{{h323_sip_config.h323[0].e164|trim}}@{{sipdomain_name|trim }}</URI>
   </SIP>
 </Configuration>

@@ -13,12 +13,14 @@
     dest: "{{ sip_h323_file }}"
   register: config_template
 
-- name: configure Cisco Conference Endpoint
-  uri:
-    url: "{{ base_url}}/putxml"
-    headers:
-      Cookie: "SessionId={{ session_id }}"
-      Content-Type: "text/xml"
-    method: POST
-    body: "{{ lookup('file', sip_h323_file) }}"
-  changed_when: config_template.changed
+- debug: msg="{{ lookup('file', config_template.dest) }}"
+
+  #- name: configure Cisco Conference Endpoint
+  #uri:
+  #  url: "{{ base_url}}/putxml"
+  #  headers:
+  #    Cookie: "SessionId={{ session_id }}"
+  #    Content-Type: "text/xml"
+  #  method: POST
+  #  body: "{{ lookup('file', sip_h323_file) }}"
+  #changed_when: config_template.changed

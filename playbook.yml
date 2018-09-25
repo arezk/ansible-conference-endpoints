@@ -7,7 +7,7 @@
     password: "{{ vault_password }}"
     url_protocol: "{{ vault_url_protocol }}"
     sipdomain_name: " {{ vault_sipdomain_name }}"
-    call_control_ip: "{{ vault_call_control_ip  }}"
+    call_control_ips: "{{ vault_call_control_ips }}"
   roles:
     - role: tempdir-mgmt
       temp_dir_action: create
