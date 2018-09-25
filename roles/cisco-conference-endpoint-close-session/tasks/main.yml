@@ -6,4 +6,4 @@
     status_code: 204
     headers:
       Cookie: "SessionId={{ session_id }}"
-
+  when: session_id is defined

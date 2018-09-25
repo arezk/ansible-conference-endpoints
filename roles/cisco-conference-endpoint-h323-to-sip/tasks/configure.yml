@@ -1,0 +1,53 @@
+---
+- assert:
+    that: parsed_conf_endpoint_config is defined
+    msg: >
+      conf_endpoint_config should be defined.
+      It should contain the XML config of the conference endpoint
+- assert:
+    that: temp_directory is defined
+    msg: >
+      temp_directory should be defined
+      it defines the temporary location to store xml files
+      on the ansible server
+- assert:
+    that: session_id is defined
+    msg: >
+      session_id is required to login into the
+      Cisco Conference endpoint
+
+- assert:
+    that:
+      - call_control_ips is defined
+      - call_control_ips is iterable
+    msg: >
+      call_control_ips is list of Call Control Devices (CUCM/VCS)
+
+- assert:
+    that: sipdomain_name is defined
+    msg: >
+      sipdomain_name is required to configure SIP URI
+
+- block:
+    - name: Check that SIP is configured
+      assert:
+        that:
+          - parsed_conf_endpoint_config.services[0].sip
+          - not parsed_conf_endpoint_config.services[0].h323
+          - parsed_conf_endpoint_config.conference[0].defaultprotocol == 'Sip'
+
+    - set_fact:
+        configure_sip: true
+  rescue:
+    - set_fact:
+        configure_sip: false
+
+    - debug:
+        msg: "SIP is already configured"
+
+- block:
+    - name: convert H323 to SIP
+      include_tasks: change-to-sip.yml
+  rescue:
+    - include_tasks: switch-back-to-h323.yml
+  when: configure_sip == true

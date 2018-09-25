@@ -1,5 +1,17 @@
 ---
+- name: ansible_play_hosts what is that
+  debug:
+    var: ansible_host
+  run_once: true
+
+- name: ansible_play_hosts_all what is that
+  debug:
+    var: hostvars[ansible_host].unreachable
+  run_once: true
+  when: hostvars[ansible_host].unreachable is defined
+
 - name: generate report
   template:
     src: report.j2
     dest: /tmp/final_report.txt
+  run_once: true

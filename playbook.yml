@@ -15,4 +15,10 @@
     - role: cisco-conference-endpoint-close-session
     - role: tempdir-mgmt
       temp_dir_action: destroy
+
+- hosts: all
+  connection: local
+  gather_facts: no
+  roles:
     - role: cisco-conference-endpoint-report
+      tags: report

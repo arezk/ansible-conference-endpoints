@@ -1,4 +1,7 @@
 {% for _host in play_hosts %}
-{{ hostvars[_host].configure_sip }}, {{_host}}
+
+{% if hostvars[_host].failed_to_get_config is defined %}
+{{ hostvars[_host].failed_to_get_config }}, {{_host}}
+{% endif %}
 
 {% endfor %}

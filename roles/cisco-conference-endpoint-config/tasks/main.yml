@@ -1,7 +1,6 @@
 ---
 # tasks file for cisco-conf-endpoint-login
-- name: Get Session ID Steps
-  block:
+- block:
     - name: Get session ID
       uri:
         url: "{{base_url}}/xmlapi/session/begin"
@@ -10,32 +9,31 @@
         method: POST
         status_code: 204
       register: login_output
+
+    - name: define the session ID
+      set_fact:
+        session_id: "{{ login_output.cookies['SessionId'] }}"
+
+    - name: save Cisco Conference Room config to the conf_endpoint_config variable
+      uri:
+        url: "{{ base_url}}/configuration.xml"
+        headers:
+          Cookie: "SessionId={{ session_id }}"
+        method: GET
+        return_content: yes
+      register: url_output
+
+    - name: Extract XML Config
+      set_fact:
+        conf_endpoint_config: "{{ url_output.content }}"
+
+    - copy:
+        content: "{{ url_output.content }}"
+        dest: /tmp/100.xml
+
+    - name: Parse XML Data and place key variables in a JSON structure
+      set_fact:
+        parsed_conf_endpoint_config: "{{ conf_endpoint_config | parse_xml(spec_file) }}"
   rescue:
-    - name: Inform the User that the Conf End Point is inaccessible
-      fail:
-        msg: "Unable to log into {{ ansible_host }}"
-
-- name: define the session ID
-  set_fact:
-    session_id: "{{ login_output.cookies['SessionId'] }}"
-
-- name: save Cisco Conference Room config to the conf_endpoint_config variable
-  uri:
-    url: "{{ base_url}}/configuration.xml"
-    headers:
-      Cookie: "SessionId={{ session_id }}"
-    method: GET
-    return_content: yes
-  register: url_output
-
-- name: Extract XML Config
-  set_fact:
-    conf_endpoint_config: "{{ url_output.content }}"
-
-- copy:
-    content: "{{ url_output.content }}"
-    dest: /tmp/100.xml
-
-- name: Parse XML Data and place key variables in a JSON structure
-  set_fact:
-    parsed_conf_endpoint_config: "{{ conf_endpoint_config | parse_xml(spec_file) }}"
+    - set_fact:
+        failed_to_get_config: true
