@@ -1,0 +1,7 @@
+---
+- assert:
+    that: temp_dir_action is defined
+    msg: >
+      temp_dir_action must be defined.
+      It should be either 'create' or 'destroy'
+- include_tasks: "{{ temp_dir_action }}.yml"

@@ -1,0 +1,11 @@
+---
+spec_path: "roles/cisco-conference-endpoint-config/specs"
+spec_file: "{{spec_path}}/conf-endpoint-config.yml"
+url_protocol: 'https'
+base_url: "{{ url_protocol }}://{{ansible_host}}"
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+<Configuration>
+  <NetworkServices>
+    <H323>
+      <Mode>On</Mode>
+    </H323>
+    <SIP>
+      <Mode>Off</Mode>
+    </SIP>
+  </NetworkServices>
+  <DefaultCall>
+    <Protocol>H323</Protocol>
+  </DefaultCall>
+</Configuration>

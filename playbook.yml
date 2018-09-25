@@ -1,0 +1,17 @@
+---
+- hosts: cisco-endpoints
+  connection: local
+  gather_facts: no
+  vars:
+    username: "{{ vault_username }}"
+    password: "{{ vault_password }}"
+    url_protocol: "{{ vault_url_protocol }}"
+    sipdomain_name: " {{ vault_sipdomain_name }}"
+    call_control_ip: "{{ vault_call_control_ip  }}"
+  roles:
+    - role: tempdir-mgmt
+      temp_dir_action: create
+    - role: cisco-conference-endpoint-h323-to-sip
+    - role: cisco-conference-endpoint-close-session
+    - role: tempdir-mgmt
+      temp_dir_action: destroy

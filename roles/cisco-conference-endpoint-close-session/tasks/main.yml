@@ -1,0 +1,9 @@
+---
+- name: Close Conference Room XML Session
+  uri:
+    url: "{{ base_url}}/xmlapi/session/end"
+    method: POST
+    status_code: 204
+    headers:
+      Cookie: "SessionId={{ session_id }}"
+

@@ -1,0 +1,37 @@
+---
+- assert:
+    that: parsed_conf_endpoint_config is defined
+    msg: >
+      conf_endpoint_config should be defined.
+      It should contain the XML config of the conference endpoint
+- assert:
+    that: temp_directory is defined
+    msg: >
+      temp_directory should be defined
+      it defines the temporary location to store xml files
+      on the ansible server
+- assert:
+    that: session_id is defined
+    msg: >
+      session_id is required to login into the
+      Cisco Conference endpoint
+
+- assert:
+    that: call_control_ip is defined
+    msg: >
+      call_control_ip is the IP/Hostname of the CallManager or ExpressWay-C
+
+- assert:
+    that: sipdomain_name is defined
+    msg: >
+      sipdomain_name is required to configure SIP URI
+
+
+- block:
+    - include_tasks: check-if-sip-is-configured.yml
+    - include_tasks: change-to-sip.yml
+      when: sip_not_configured
+  rescue:
+    - include_tasks: switch-back-to-h323.yml
+    - fail:
+        msg: "Endpoint failed to be converted to SIP"

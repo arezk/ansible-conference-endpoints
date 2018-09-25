@@ -1,0 +1,23 @@
+<Configuration>
+  <NetworkServices>
+    <H323>
+      <Mode>Off</Mode>
+    </H323>
+    <SIP>
+      <Mode>On</Mode>
+    </SIP>
+  </NetworkServices>
+  <Conference>
+    <DefaultCall>
+      <Protocol>Sip</Protocol>
+    </DefaultCall>
+  </Conference>
+  <SIP>
+    <DisplayName>{{ h323_sip_config.system[0].name }}</DisplayName>
+    <ListenPort>Off</ListenPort>
+    <Proxy item="1">
+      <Address>{{ call_control_ip }}</Address>
+    </Proxy>
+    <URI>{{ h323_sip_config.h323[0].e164}}@{{ sipdomain_name }}</URI>
+  </SIP>
+</Configuration>

@@ -1,0 +1,4 @@
+- name: delete tempdir
+  file:
+    path: "{{ temp_directory.path }}"
+    state: absent

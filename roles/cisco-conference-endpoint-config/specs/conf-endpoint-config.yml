@@ -1,0 +1,44 @@
+vars:
+  services:
+    h323: "{{ item.h323_mode != 'On'}}"
+    sip: "{{ item.sip_mode  != 'On' }}"
+  h323:
+    e164: "{{ item.e164 }}"
+  system:
+    name: "{{ item.unitname }}"
+  conference:
+    defaultprotocol: "{{ item.defaultprotocol }}"
+  sip:
+    displayname: "{{ item.displayname }}"
+    proxy: "{{ item.proxy }}"
+
+keys:
+  conference:
+    value: "{{ conference }}"
+    top: "Conference"
+    items:
+      defaultprotocol: "DefaultCall/Protocol"
+  system:
+    value: "{{ system }}"
+    top: "SystemUnit"
+    items:
+      unitname: "Name"
+  sip:
+    value: "{{ sip }}"
+    top: "SIP"
+    items:
+      displayname: "DisplayName"
+      proxy: "Proxy/Address"
+  h323:
+    value: "{{ h323 }}"
+    top: "H323"
+    items:
+      e164: "H323Alias/E164"
+  services:
+    value: "{{ services }}"
+    top: "NetworkServices"
+    items:
+      h323_mode: "H323/Mode"
+      sip_mode: "SIP/Mode"
+
+
