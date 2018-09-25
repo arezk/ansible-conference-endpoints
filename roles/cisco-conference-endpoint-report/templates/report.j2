@@ -1,7 +1,43 @@
-{% for _host in play_hosts %}
+H323 to SIP Conversion
+========================
 
-{% if hostvars[_host].failed_to_get_config is defined %}
-{{ hostvars[_host].failed_to_get_config }}, {{_host}}
-{% endif %}
+Date: {{ lookup('pipe', 'date') }}
 
+{%- set configured_sip_hosts = [] %}
+{%- set unreachable_hosts = [] %}
+{%- set sip_conversion_failed = [] %}
+
+{%- for _host in play_hosts %}
+  {%- if (hostvars[_host].sip_configured is defined) %}
+    {%- if (hostvars[_host].sip_configured) %}
+      {{ configured_sip_hosts.append(_host) }}
+    {%- else %}
+      {{ sip_conversion_failed.append(_host) }}
+    {%- endif %}
+  {% else %}
+    {{ unreachable_hosts.append(_host) }}
+  {%- endif %}
+{%- endfor %}
+
+
+Total Conference Room Endpoints: {{ ansible_play_hosts_all |length }}
+Conference Endpoint Successfully Configured: {{ configured_sip_hosts|length }}
+Unreachable Conference Rooms: {{ unreachable_hosts | length }}
+SIP Conversion Failed: {{ sip_conversion_failed | length }}
+
+SIP Conversion Failed List
+----------------------------
+
+{% for i in  sip_conversion_failed %}
+* {{ i }}
 {% endfor %}
+
+
+Unreachable Conference Endpoints
+--------------------------------
+
+{% for i in unreachable_hosts %}
+* {{i}}
+{% endfor %}
+
+

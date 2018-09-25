@@ -37,17 +37,27 @@
           - parsed_conf_endpoint_config.conference[0].defaultprotocol == 'Sip'
 
     - set_fact:
-        configure_sip: true
-  rescue:
-    - set_fact:
         configure_sip: false
+
+    - set_fact:
+        sip_configured: true
 
     - debug:
         msg: "SIP is already configured"
 
+  rescue:
+    - set_fact:
+        configure_sip: true
+
+
 - block:
     - name: convert H323 to SIP
       include_tasks: change-to-sip.yml
+    - include_tasks: verify-sip-config.yml
+    - set_fact:
+        sip_configured: true
   rescue:
+    - set_fact:
+        sip_configured: false
     - include_tasks: switch-back-to-h323.yml
   when: configure_sip == true

@@ -1,0 +1,16 @@
+- block:
+    - name: Get session ID
+      uri:
+        url: "{{base_url}}/xmlapi/session/begin"
+        user: "{{ vault_username }}"
+        password: "{{ vault_password }}"
+        method: POST
+        status_code: 204
+      register: login_output
+
+    - name: define the session ID
+      set_fact:
+        session_id: "{{ login_output.cookies['SessionId'] }}"
+  rescue:
+    - set_fact:
+        failed_to_login: true
