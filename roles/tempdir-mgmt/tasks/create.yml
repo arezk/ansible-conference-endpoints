@@ -1,6 +1,0 @@
----
-- name: create a temp directory
-  tempfile:
-    state: directory
-    suffix: temp
-  register: temp_directory
