@@ -9,14 +9,10 @@
     sipdomain_name: " {{ vault_sipdomain_name }}"
     call_control_ips: "{{ vault_call_control_ips }}"
   roles:
-    - role: tempdir-mgmt
-      temp_dir_action: create
     - role: cisco-conference-endpoint-start-session
     - role: cisco-conference-endpoint-config
     - role: cisco-conference-endpoint-h323-to-sip
     - role: cisco-conference-endpoint-close-session
-    - role: tempdir-mgmt
-      temp_dir_action: destroy
 
 - hosts: all
   connection: local

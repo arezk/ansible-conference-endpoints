@@ -7,4 +7,4 @@
       Content-Type: "text/xml"
     method: POST
     body: "{{ lookup('file', 'convert_back_to_h323.xml') }}"
-  changed_when: false
+  changed_when: true

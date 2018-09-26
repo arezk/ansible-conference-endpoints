@@ -5,12 +5,6 @@
       conf_endpoint_config should be defined.
       It should contain the XML config of the conference endpoint
 - assert:
-    that: temp_directory is defined
-    msg: >
-      temp_directory should be defined
-      it defines the temporary location to store xml files
-      on the ansible server
-- assert:
     that: session_id is defined
     msg: >
       session_id is required to login into the
@@ -32,9 +26,6 @@
     sip_endpoint_registered: false
 
 - block:
-    - fail:
-        msg: "DEBUG"
-
     - name: Check if Endpoint is SIP registered
       include_role:
         name: cisco-conference-endpoint-status
@@ -64,11 +55,14 @@
 - block:
     - name: convert H323 to SIP
       include_tasks: change-to-sip.yml
-    - include_tasks: verify-sip-config.yml
+
+    - name:  Verify SIP registration
+      include_tasks: verify-sip-config.yml
+
     - set_fact:
         sip_configured: true
   rescue:
     - set_fact:
-        sip_conversion_failed: false
+        sip_conversion_failed: true
     - include_tasks: switch-back-to-h323.yml
   when: configure_sip == true

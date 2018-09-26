@@ -3,16 +3,6 @@
   set_fact:
     h323_sip_config: "{{ conf_endpoint_config | parse_xml(spec_file) }}"
 
-- name: create xml file variable with config changes
-  set_fact:
-    sip_h323_file: "{{ temp_directory.path }}/h323-to-sip.xml"
-
-- name: create SIP and H323 Config XML Snippet
-  template:
-    src: h323-to-sip.j2
-    dest: "{{ sip_h323_file }}"
-  register: config_template
-
 - name: configure Cisco Conference Endpoint
   uri:
     url: "{{ base_url}}/putxml"
@@ -20,5 +10,5 @@
       Cookie: "SessionId={{ session_id }}"
     Content-Type: "text/xml"
     method: POST
-    body: "{{ lookup('file', sip_h323_file) }}"
-  changed_when: config_template.changed
+    body: "{{ lookup('template', 'h323-to-sip.j2') }}"
+  changed_when: true
