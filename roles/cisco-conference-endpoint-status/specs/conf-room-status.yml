@@ -1,0 +1,17 @@
+vars:
+  sip:
+    status: "{{ item.status }}"
+  h323:
+    status: "{{ item.status }}"
+
+keys:
+  sip:
+    value: "{{ sip }}"
+    top: "SIP"
+    items:
+      status: "Registration/Status"
+  h323:
+    value: "{{ h323 }}"
+    top: "H323"
+    items:
+      status: "Registration/Status"

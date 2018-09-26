@@ -1,0 +1,9 @@
+spec_path: "roles/cisco-conference-endpoint-status/specs"
+spec_file: "{{spec_path}}/conf-room-status.yml"
+url_protocol: 'https'
+base_url: "{{ url_protocol }}://{{ansible_host}}"
+delay_interval: 1
+retry_interval: 1
+status_msg: ""
+call_protocol: sip
+

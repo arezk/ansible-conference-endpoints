@@ -1,3 +1,9 @@
 ---
+- set_fact:
+    sip_endpoint_registered: false
+- set_fact:
+    sip_configured: false
+- set_fact:
+    sip_conversion_failed: false
 - include_tasks: configure.yml
   when: parsed_conf_endpoint_config is defined

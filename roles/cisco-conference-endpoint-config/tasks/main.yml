@@ -1,6 +1,6 @@
 ---
 - block:
-    - name: save Cisco Conference Room config to the conf_endpoint_config variable
+    - name: Save Cisco Conference Endpoint Config
       uri:
         url: "{{ base_url}}/configuration.xml"
         headers:

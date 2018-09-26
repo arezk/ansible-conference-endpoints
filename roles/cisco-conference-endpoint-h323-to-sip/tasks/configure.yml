@@ -28,22 +28,33 @@
     msg: >
       sipdomain_name is required to configure SIP URI
 
-- block:
-    - name: Check that SIP is configured
-      assert:
-        that:
-          - parsed_conf_endpoint_config.services[0].sip
-          - not parsed_conf_endpoint_config.services[0].h323
-          - parsed_conf_endpoint_config.conference[0].defaultprotocol == 'Sip'
+- set_fact:
+    sip_endpoint_registered: false
 
-    - set_fact:
-        configure_sip: false
+- block:
+    - fail:
+        msg: "DEBUG"
+
+    - name: Check if Endpoint is SIP registered
+      include_role:
+        name: cisco-conference-endpoint-status
+
+    - assert:
+        that:
+          - endpoint_status_var.sip[0].status != None
 
     - set_fact:
         sip_configured: true
 
+    - set_fact:
+          configure_sip: false
+
     - debug:
-        msg: "SIP is already configured"
+        msg:  "Endpoint has SIP Configured"
+
+    - set_fact:
+        sip_endpoint_registered: "Endpoint is SIP Registered"
+      when: endpoint_status_var.sip[0].status == 'Registered'
 
   rescue:
     - set_fact:
@@ -58,6 +69,6 @@
         sip_configured: true
   rescue:
     - set_fact:
-        sip_configured: false
+        sip_conversion_failed: false
     - include_tasks: switch-back-to-h323.yml
   when: configure_sip == true

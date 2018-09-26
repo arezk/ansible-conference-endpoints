@@ -11,6 +11,8 @@
     - name: define the session ID
       set_fact:
         session_id: "{{ login_output.cookies['SessionId'] }}"
+    - set_fact:
+        unreachable: false
   rescue:
     - set_fact:
-        failed_to_login: true
+        unreachable: true

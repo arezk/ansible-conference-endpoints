@@ -1,3 +1,11 @@
 - include_role:
-    name: cisco-conference-endpoint-config
+    name: cisco-conference-endpoint-status
+  vars:
+    retry_interval: 5
+    delay_interval: 2
+    status_msg: "Registered"
+    call_protocol: sip
 
+- set_fact:
+    sip_endpoint_registered: true
+  when:  status_failed is not defined

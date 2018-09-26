@@ -3,36 +3,44 @@ H323 to SIP Conversion
 
 Date: {{ lookup('pipe', 'date') }}
 
-{%- set configured_sip_hosts = [] %}
+{%- set registered_sip_hosts = [] %}
+{%- set sip_configured_hosts = [] %}
 {%- set unreachable_hosts = [] %}
-{%- set sip_conversion_failed = [] %}
+{%- set sip_conversion_failed_hosts = [] %}
 
 {%- for _host in play_hosts %}
-  {%- if (hostvars[_host].sip_configured is defined) %}
-    {%- if (hostvars[_host].sip_configured) %}
-      {{ configured_sip_hosts.append(_host) }}
-    {%- else %}
-      {{ sip_conversion_failed.append(_host) }}
-    {%- endif %}
-  {% else %}
+  {%- if (hostvars[_host].sip_endpoint_registered) %}
+      {{ registered_sip_hosts.append(_host) }}
+  {%- elif (hostvars[_host].sip_configured) %}
+      {{ sip_configured_hosts.append(_host) }}
+  {%- elif (hostvars[_host].sip_conversion_failed) %}
+      {{ sip_conversion_failed_hosts.append(_host) }}
+  {%- elif (hostvars[_host].unreachable) %}
     {{ unreachable_hosts.append(_host) }}
   {%- endif %}
 {%- endfor %}
 
 
 Total Conference Room Endpoints: {{ ansible_play_hosts_all |length }}
-Conference Endpoint Successfully Configured: {{ configured_sip_hosts|length }}
-Unreachable Conference Rooms: {{ unreachable_hosts | length }}
-SIP Conversion Failed: {{ sip_conversion_failed | length }}
+SIP Registered EndPoints: {{ registered_sip_hosts|length }}
+SIP Configured but Not Registered: {{ sip_configured_hosts | length }}
+SIP Conversion Failed: {{ sip_conversion_failed_hosts | length }}
+Unreachable Endpoints: {{ unreachable_hosts | length }}
 
-SIP Conversion Failed List
+SIP Configured But Not Registered
 ----------------------------
 
-{% for i in  sip_conversion_failed %}
+{% for i in  sip_configured_hosts %}
 * {{ i }}
 {% endfor %}
 
 
+SIP Conversion Failed
+-----------------------
+
+{% for i in sip_conversion_failed_hosts %}
+* {{ i }}
+{% endfor %}
 Unreachable Conference Endpoints
 --------------------------------
 
