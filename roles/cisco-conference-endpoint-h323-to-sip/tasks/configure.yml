@@ -25,42 +25,44 @@
 - set_fact:
     sip_endpoint_registered: false
 
-- block:
-    - name: Check if Endpoint is SIP registered
-      include_role:
-        name: cisco-conference-endpoint-status
 
-    - assert:
-        that:
-          - endpoint_status_var.sip[0].status != None
+- name: Check if Endpoint is SIP registered
+  include_role:
+    name: cisco-conference-endpoint-status
+
+
+- set_fact:
+    configure_sip: true
+
+- name: If SIP registration works then no more action ends to be taken.
+  block:
+    - set_fact:
+        configure_sip: false
 
     - set_fact:
-        sip_configured: true
-
-    - set_fact:
-          configure_sip: false
+        sip_endpoint_registered: true
 
     - debug:
-        msg:  "Endpoint has SIP Configured"
-
-    - set_fact:
-        sip_endpoint_registered: "Endpoint is SIP Registered"
-      when: endpoint_status_var.sip[0].status == 'Registered'
-
-  rescue:
-    - set_fact:
-        configure_sip: true
+        msg: "SIP Endpoint Registered"
+  when: endpoint_status_var.sip[0].status == 'Registered'
 
 
-- block:
+
+- name: Proceed with the H323 to SIP conversion
+  block:
     - name: convert H323 to SIP
       include_tasks: change-to-sip.yml
 
     - name:  Verify SIP registration
       include_tasks: verify-sip-config.yml
 
+    - assert:
+        that: status_failed is not defined
+        msg: "SIP Registration Failed. Switching Back to H323"
+
     - set_fact:
         sip_configured: true
+
   rescue:
     - set_fact:
         sip_conversion_failed: true

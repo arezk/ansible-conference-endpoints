@@ -4,15 +4,12 @@ H323 to SIP Conversion
 Date: {{ lookup('pipe', 'date') }}
 
 {%- set registered_sip_hosts = [] %}
-{%- set sip_configured_hosts = [] %}
 {%- set unreachable_hosts = [] %}
 {%- set sip_conversion_failed_hosts = [] %}
 
 {%- for _host in play_hosts %}
   {%- if (hostvars[_host].sip_endpoint_registered) %}
       {{ registered_sip_hosts.append(_host) }}
-  {%- elif (hostvars[_host].sip_configured) %}
-      {{ sip_configured_hosts.append(_host) }}
   {%- elif (hostvars[_host].sip_conversion_failed) %}
       {{ sip_conversion_failed_hosts.append(_host) }}
   {%- elif (hostvars[_host].unreachable) %}
@@ -27,15 +24,7 @@ SIP Configured but Not Registered: {{ sip_configured_hosts | length }}
 SIP Conversion Failed: {{ sip_conversion_failed_hosts | length }}
 Unreachable Endpoints: {{ unreachable_hosts | length }}
 
-SIP Configured But Not Registered
-----------------------------
-
-{% for i in  sip_configured_hosts %}
-* {{ i }}
-{% endfor %}
-
-
-SIP Conversion Failed
+SIP Conversion Failed. Reverted Back to H323
 -----------------------
 
 {% for i in sip_conversion_failed_hosts %}

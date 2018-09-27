@@ -11,12 +11,12 @@
       until: (url_output.content | parse_xml(spec_file))[call_protocol][0].status == status_msg
       delay: "{{ delay_interval }}"
       retries: "{{ retry_interval }}"
-
-    - name: Parse XML Data and place key variables in a JSON structure
-      set_fact:
-        endpoint_status_var: "{{ url_output.content | parse_xml(spec_file) }}"
   rescue:
     - set_fact:
           status_failed: true
   when: session_id is defined
 
+- name: Parse XML Data and place key variables in a JSON structure
+  set_fact:
+    endpoint_status_var: "{{ url_output.content | parse_xml(spec_file) }}"
+  when: session_id is defined
